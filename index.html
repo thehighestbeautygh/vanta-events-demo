@@ -1,1 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#faf8f5">
 
+  <title>Vanta Events | Invitation Demo</title>
+
+  <style>
+    :root {
+      --paper: #faf8f5;
+      --white: #ffffff;
+      --ink: #191919;
+      --muted: #77736e;
+      --peach: #e9b8a5;
+      --line: #e7e0d9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .site {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 7%;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+    .edition {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .viewport {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .slides {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+
+    .slides::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      width: 100%;
+      min-width: 0;
+      min-height: 590px;
+      padding: 55px 8% 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    h1, h2, p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 750px;
+      margin-bottom: 22px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(43px, 8vw, 84px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -2px;
+    }
+
+    h1 span {
+      color: #bd8069;
+      font-style: italic;
+    }
+
+    h2 {
+      margin-bottom: 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 6vw, 56px);
+      font-weight: 400;
+      line-height: 1.12;
+    }
+
+    .description {
+      max-width: 440px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .rule {
+      width: 45px;
+      height: 2px;
+      margin: 12px 0 25px;
+      background: var(--peach);
+    }
+
+    .outline {
+      border: 1px solid var(--ink);
+      padding: 15px 23px;
+      background: transparent;
+      color: var(--ink);
+      transition: background .2s, color .2s;
+    }
+
+    .outline:hover {
+      background: var(--ink);
+      color: white;
+    }
+
+    .primary {
+      border: 1px solid var(--ink);
+      padding: 15px 25px;
+      background: var(--ink);
+      color: white;
+      transition: opacity .2s;
+    }
+
+    .primary:hover {
+      opacity: .8;
+    }
+
+    .invitation-card {
+      width: min(100%, 440px);
+      padding: 38px 24px;
+      border: 1px solid #e3d4c9;
+      background: rgba(255, 255, 255, .65);
+    }
+
+    .invitation-card .small {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .invitation-card h2 {
+      margin: 22px 0;
+      font-size: clamp(36px, 6vw, 54px);
+    }
+
+    .detail {
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .detail strong {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .detail p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dress-code {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 180px));
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .colour {
+      min-height: 115px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    .swatch {
+      width: 26px;
+      height: 26px;
+      margin-bottom: 15px;
+      border-radius: 50%;
+      background: #191919;
+    }
+
+    .swatch.peach {
+      background: var(--peach);
+    }
+
+    .colour strong {
+      font-size: 12px;
+    }
+
+    .colour small {
+      margin-top: 5px;
+      color: var(--muted);
+    }
+
+    .timeline {
+      width: min(100%, 420px);
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 85px 1fr;
+      gap: 15px;
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .timeline-item time {
+      color: #bd8069;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .timeline-item strong {
+      font-size: 13px;
+    }
+
+    .timeline-item p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .rsvp-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .rsvp-message {
+      min-height: 24px;
+      margin-top: 20px;
+      color: #6c584d;
+      font-size: 13px;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 7%;
+      border-top: 1px solid var(--line);
+    }
+
+    .navigation {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      font-size: 18px;
+    }
+
+    .nav-button:disabled {
+      opacity: .3;
+      cursor: default;
+    }
+
+    .dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #d9d2cc;
+    }
+
+    .dot.active {
+      width: 20px;
+      border-radius: 10px;
+      background: var(--ink);
+    }
+
+    .swipe-hint {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .demo-label {
+      position: fixed;
+      right: 12px;
+      bottom: 78px;
+      z-index: 5;
+      padding: 8px 11px;
+      background: #191919;
+      color: white;
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 18px 6%;
+      }
+
+      .brand {
+        font-size: 14px;
+      }
+
+      .edition {
+        font-size: 8px;
+        letter-spacing: 1px;
+      }
+
+      .slide {
+        min-height: 570px;
+        padding: 42px 7% 35px;
+      }
+
+      h1 {
+        letter-spacing: -1px;
+      }
+
+      footer {
+        padding: 15px 5%;
+      }
+
+      .swipe-hint {
+        font-size: 9px;
+        letter-spacing: 0;
+      }
+
+      .nav-button {
+        width: 36px;
+        height: 36px;
+      }
+
+      .dots {
+        gap: 5px;
+      }
+
+      .demo-label {
+        bottom: 68px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slides {
+        scroll-behavior: auto;
+      }
+
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="site">
+
+    <header>
+      <div class="brand">VANTA</div>
+      <div class="edition">Events & Invitations</div>
+    </header>
+
+    <main class="viewport">
+      <div class="slides" id="slides">
+
+        <!-- SCREEN 1: WELCOME -->
+        <section class="slide" aria-label="Welcome">
+          <p class="eyebrow">A little something for you</p>
+
+          <h1>
+            An evening<br>
+            worth <span>showing up for.</span>
+          </h1>
+
+          <div class="rule"></div>
+
+          <p class="description">
+            Some occasions deserve more than an ordinary invitation.
+            This is your first look at something special.
+          </p>
+
+          <button class="primary" data-next>
+            Open your invitation &nbsp; →
+          </button>
+        </section>
+
+        <!-- SCREEN 2: INVITATION -->
+        <section class="slide" aria-label="Invitation details">
+          <p class="eyebrow">You're invited</p>
+
+          <div class="invitation-card">
+            <p class="small">A birthday celebration</p>
+
+            <h2>The tailored<br>season</h2>
+
+            <p class="description">
+              <em>After sunset</em>
+            </p>
+
+            <div class="rule" style="margin-inline:auto"></div>
+
+            <div class="detail">
+              <strong>Date</strong>
+              <p>[Event date]</p>
+            </div>
+
+            <div class="detail">
+              <strong>Time</strong>
+              <p>[Event time]</p>
+            </div>
+
+            <div class="detail">
+              <strong>Location</strong>
+              <p>[Venue and address]</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCREEN 3: DRESS CODE -->
+        <section class="slide" aria-label="Dress code">
+          <p class="eyebrow">The dress code</p>
+
+          <h2>Come dressed<br>like <span>you mean it.</span></h2>
+
+          <p class="description">
+            Tailored, fashionable and entirely your own.
+            Bring your personal style; there's no need to wear a suit.
+          </p>
+
+          <div class="dress-code">
+            <div class="colour">
+              <div class="swatch"></div>
+              <strong>Black</strong>
+              <small>Classic & sharp</small>
+            </div>
+
+            <div class="colour">
+              <div class="swatch peach"></div>
+              <strong>Peach</strong>
+              <small>Soft & understated</small>
+            </div>
+          </div>
+
+          <p class="description">
+            These are inspiration colours, not restrictions.
+          </p>
+        </section>
+
+        <!-- SCREEN 4: THE EVENING -->
+        <section class="slide" aria-label="Evening schedule">
+          <p class="eyebrow">A glimpse of the evening</p>
+
+          <h2>One evening.<br><span>Several moments.</span></h2>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <time>ARRIVAL</time>
+              <div>
+                <strong>Settle in</strong>
+                <p>Arrive, find your place and get comfortable.</p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <time>THE EVENING</time>
+              <div>
+                <strong>Good food, good company</strong>
+                <p>Enjoy the atmosphere and spend time together.</p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <time>AFTER DARK</time>
+              <div>
+                <strong>Let the night unfold</strong>
+                <p>Music, laughter and moments worth remembering.</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="description" style="margin-top:18px">
+            Final timings will be shared with the confirmed invitation.
+          </p>
+        </section>
+
+        <!-- SCREEN 5: RSVP -->
+        <section class="slide" aria-label="RSVP">
+          <p class="eyebrow">We hope to see you there</p>
+
+          <h2>Will you<br><span>be joining us?</span></h2>
+
+          <p class="description">
+            Let us know whether you'll be able to make it.
+            Your response helps us prepare for the evening.
+          </p>
+
+          <div class="rsvp-options">
+            <button class="primary" data-rsvp="yes">
+              I'll be there
+            </button>
+
+            <button class="outline" data-rsvp="no">
+              Can't make it
+            </button>
+          </div>
+
+          <p class="rsvp-message" id="rsvpMessage" aria-live="polite"></p>
+
+          <p class="description">
+            This is a demonstration. Responses are not yet saved
+            to a database or sent to the event organiser.
+          </p>
+        </section>
+
+      </div>
+    </main>
+
+    <footer>
+      <span class="swipe-hint" id="swipeHint">
+        Swipe to continue →
+      </span>
+
+      <div class="navigation">
+        <div class="dots" id="dots" aria-label="Invitation screens">
+          <button class="dot active" aria-label="Screen 1"></button>
+          <button class="dot" aria-label="Screen 2"></button>
+          <button class="dot" aria-label="Screen 3"></button>
+          <button class="dot" aria-label="Screen 4"></button>
+          <button class="dot" aria-label="Screen 5"></button>
+        </div>
+
+        <button class="nav-button" id="prev" aria-label="Previous screen" disabled>
+          ←
+        </button>
+
+        <button class="nav-button" id="next" aria-label="Next screen">
+          →
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <div class="demo-label">Demo preview</div>
+
+  <script>
+    const slidesContainer = document.getElementById("slides");
+    const slides = [...document.querySelectorAll(".slide")];
+    const dots = [...document.querySelectorAll(".dot")];
+    const prevButton = document.getElementById("prev");
+    const nextButton = document.getElementById("next");
+    const swipeHint = document.getElementById("swipeHint");
+
+    let currentSlide = 0;
+
+    function goToSlide(index) {
+      currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+
+      slidesContainer.scrollTo({
+        left: slidesContainer.clientWidth * currentSlide,
+        behavior: "smooth"
+      });
+
+      updateNavigation();
+    }
+
+    function updateNavigation() {
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === currentSlide);
+        dot.setAttribute("aria-current",
+          index === currentSlide ? "step" : "false");
+      });
+
+      prevButton.disabled = currentSlide === 0;
+      nextButton.disabled = currentSlide === slides.length - 1;
+
+      swipeHint.textContent =
+        currentSlide === slides.length - 1
+          ? "You're all caught up"
+          : "Swipe to continue →";
+    }
+
+    prevButton.addEventListener("click", () => {
+      goToSlide(currentSlide - 1);
+    });
+
+    nextButton.addEventListener("click", () => {
+      goToSlide(currentSlide + 1);
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => goToSlide(index));
+    });
+
+    document.querySelectorAll("[data-next]").forEach(button => {
+      button.addEventListener("click", () => {
+        goToSlide(currentSlide + 1);
+      });
+    });
+
+    // Keep the selected screen in sync when the guest swipes.
+    let scrollTimer;
+
+    slidesContainer.addEventListener("scroll", () => {
+      clearTimeout(scrollTimer);
+
+      scrollTimer = setTimeout(() => {
+        const width = slidesContainer.clientWidth;
+
+        if (width > 0) {
+          currentSlide = Math.max(
+            0,
+            Math.min(
+              Math.round(slidesContainer.scrollLeft / width),
+              slides.length - 1
+            )
+          );
+
+          updateNavigation();
+        }
+      }, 80);
+    });
+
+    // Keyboard navigation for desktop users.
+    document.addEventListener("keydown", event => {
+      if (event.key === "ArrowRight") {
+        goToSlide(currentSlide + 1);
+      }
+
+      if (event.key === "ArrowLeft") {
+        goToSlide(currentSlide - 1);
+      }
+    });
+
+    // Prototype RSVP interaction: this does not save responses.
+    document.querySelectorAll("[data-rsvp]").forEach(button => {
+      button.addEventListener("click", () => {
+        const message = document.getElementById("rsvpMessage");
+
+        message.textContent =
+          button.dataset.rsvp === "yes"
+            ? "Lovely! Your sample response is: Attending."
+            : "Thank you. Your sample response is: Unable to attend.";
+      });
+    });
+
+    // Recalculate the screen position when the window changes size.
+    window.addEventListener("resize", () => {
+      slidesContainer.scrollLeft =
+        slidesContainer.clientWidth * currentSlide;
+    });
+
+    updateNavigation();
+  </script>
+</body>
+</html>
