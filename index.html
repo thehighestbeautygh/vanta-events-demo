@@ -2,813 +2,508 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#faf8f5">
-
-  <title>Vanta Events | Invitation Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vanta Events | Reception</title>
 
   <style>
     :root {
-      --paper: #faf8f5;
-      --white: #ffffff;
-      --ink: #191919;
-      --muted: #77736e;
-      --peach: #e9b8a5;
-      --line: #e7e0d9;
+      --bg: #f8f6f2;
+      --card: #fff;
+      --text: #262320;
+      --muted: #77716b;
+      --border: #e9e2da;
+      --peach: #d9a28d;
+      --green: #28764c;
+      --red: #a43e3e;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
     }
 
-    button {
-      font: inherit;
-      cursor: pointer;
-    }
+    button, input { font: inherit; }
 
-    .site {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    .page {
+      width: min(1100px, 92%);
+      margin: auto;
+      padding: 32px 0 50px;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 22px 7%;
-      border-bottom: 1px solid var(--line);
+      gap: 12px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--border);
     }
 
     .brand {
-      font-size: 17px;
-      font-weight: 800;
+      font-size: 13px;
+      font-weight: 700;
       letter-spacing: 3px;
-    }
-
-    .edition {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .viewport {
-      flex: 1;
-      display: flex;
-      min-height: 0;
-      overflow: hidden;
-    }
-
-    .slides {
-      display: flex;
-      width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior-x: contain;
-    }
-
-    .slides::-webkit-scrollbar {
-      display: none;
-    }
-
-    .slide {
-      flex: 0 0 100%;
-      width: 100%;
-      min-width: 0;
-      min-height: 590px;
-      padding: 55px 8% 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
     }
 
     .eyebrow {
       color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 3px;
+      font-size: 11px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-
-    h1, h2, p {
-      margin-top: 0;
     }
 
     h1 {
-      max-width: 750px;
-      margin-bottom: 22px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(43px, 8vw, 84px);
-      font-weight: 400;
-      line-height: 1.05;
-      letter-spacing: -2px;
-    }
-
-    h1 span {
-      color: #bd8069;
-      font-style: italic;
+      margin: 28px 0 8px;
+      font: 400 clamp(30px, 5vw, 44px) Georgia, serif;
     }
 
     h2 {
-      margin-bottom: 18px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(34px, 6vw, 56px);
-      font-weight: 400;
-      line-height: 1.12;
+      font: 400 25px Georgia, serif;
     }
 
-    .description {
-      max-width: 440px;
+    .muted {
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.9;
-    }
-
-    .rule {
-      width: 45px;
-      height: 2px;
-      margin: 12px 0 25px;
-      background: var(--peach);
-    }
-
-    .outline {
-      border: 1px solid var(--ink);
-      padding: 15px 23px;
-      background: transparent;
-      color: var(--ink);
-      transition: background .2s, color .2s;
-    }
-
-    .outline:hover {
-      background: var(--ink);
-      color: white;
-    }
-
-    .primary {
-      border: 1px solid var(--ink);
-      padding: 15px 25px;
-      background: var(--ink);
-      color: white;
-      transition: opacity .2s;
-    }
-
-    .primary:hover {
-      opacity: .8;
-    }
-
-    .invitation-card {
-      width: min(100%, 440px);
-      padding: 38px 24px;
-      border: 1px solid #e3d4c9;
-      background: rgba(255, 255, 255, .65);
-    }
-
-    .invitation-card .small {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .invitation-card h2 {
-      margin: 22px 0;
-      font-size: clamp(36px, 6vw, 54px);
-    }
-
-    .detail {
-      padding: 18px 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .detail strong {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .detail p {
-      margin-bottom: 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .dress-code {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 180px));
-      gap: 12px;
-      margin: 22px 0;
-    }
-
-    .colour {
-      min-height: 115px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: flex-start;
-      text-align: left;
-      border: 1px solid var(--line);
-      background: white;
-    }
-
-    .swatch {
-      width: 26px;
-      height: 26px;
-      margin-bottom: 15px;
-      border-radius: 50%;
-      background: #191919;
-    }
-
-    .swatch.peach {
-      background: var(--peach);
-    }
-
-    .colour strong {
-      font-size: 12px;
-    }
-
-    .colour small {
-      margin-top: 5px;
-      color: var(--muted);
-    }
-
-    .timeline {
-      width: min(100%, 420px);
-      margin-top: 15px;
-      text-align: left;
-    }
-
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 85px 1fr;
-      gap: 15px;
-      padding: 18px 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .timeline-item time {
-      color: #bd8069;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .timeline-item strong {
-      font-size: 13px;
-    }
-
-    .timeline-item p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 12px;
       line-height: 1.6;
     }
 
-    .rsvp-options {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 15px;
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
     }
 
-    .rsvp-message {
-      min-height: 24px;
-      margin-top: 20px;
-      color: #6c584d;
+    .login {
+      max-width: 440px;
+      margin: 42px auto;
+    }
+
+    .login h2 { margin-bottom: 8px; }
+
+    label {
+      display: block;
       font-size: 13px;
+      margin-top: 18px;
     }
 
-    footer {
+    input {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+    }
+
+    button {
+      padding: 12px 17px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--text);
+      color: white;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .secondary {
+      background: #eee7e0;
+      color: var(--text);
+    }
+
+    .message {
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--red);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
-      padding: 18px 7%;
-      border-top: 1px solid var(--line);
+      margin: 24px 0 18px;
     }
 
-    .navigation {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
     }
 
-    .nav-button {
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--line);
+    .stat {
+      padding: 20px;
       background: white;
-      color: var(--ink);
-      font-size: 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
     }
 
-    .nav-button:disabled {
-      opacity: .3;
-      cursor: default;
+    .stat strong {
+      display: block;
+      margin-top: 12px;
+      font: 36px Georgia, serif;
     }
 
-    .dots {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      padding: 0;
-      border: 0;
-      border-radius: 50%;
-      background: #d9d2cc;
-    }
-
-    .dot.active {
-      width: 20px;
-      border-radius: 10px;
-      background: var(--ink);
-    }
-
-    .swipe-hint {
+    .stat span {
       color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 1px;
+      font-size: 12px;
     }
 
-    .demo-label {
-      position: fixed;
-      right: 12px;
-      bottom: 78px;
-      z-index: 5;
-      padding: 8px 11px;
-      background: #191919;
-      color: white;
-      font-size: 9px;
+    .table-panel { padding: 0; overflow: hidden; }
+
+    .table-heading { padding: 8px 22px 0; }
+
+    .table-heading h2 { margin-bottom: 6px; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 16px 22px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 10px;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
 
-    @media (max-width: 600px) {
-      header {
-        padding: 18px 6%;
-      }
-
-      .brand {
-        font-size: 14px;
-      }
-
-      .edition {
-        font-size: 8px;
-        letter-spacing: 1px;
-      }
-
-      .slide {
-        min-height: 570px;
-        padding: 42px 7% 35px;
-      }
-
-      h1 {
-        letter-spacing: -1px;
-      }
-
-      footer {
-        padding: 15px 5%;
-      }
-
-      .swipe-hint {
-        font-size: 9px;
-        letter-spacing: 0;
-      }
-
-      .nav-button {
-        width: 36px;
-        height: 36px;
-      }
-
-      .dots {
-        gap: 5px;
-      }
-
-      .demo-label {
-        bottom: 68px;
-      }
+    .badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      background: #f0ede8;
+      white-space: nowrap;
+      font-size: 11px;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .slides {
-        scroll-behavior: auto;
-      }
+    .green { background: #e7f3eb; color: var(--green); }
+    .red { background: #f8e9e7; color: var(--red); }
 
-      * {
-        transition: none !important;
-      }
+    .empty {
+      padding: 22px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hidden { display: none !important; }
+
+    footer {
+      padding-top: 26px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+    }
+
+    @media (max-width: 700px) {
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stat { padding: 16px; }
+      .panel { padding: 18px; }
+      .table-panel { padding: 0; }
     }
   </style>
 </head>
 
 <body>
-  <div class="site">
-
+  <main class="page">
     <header>
-      <div class="brand">VANTA</div>
-      <div class="edition">Events & Invitations</div>
+      <div class="brand">VANTA EVENTS</div>
+      <div class="eyebrow">Reception dashboard</div>
     </header>
 
-    <main class="viewport">
-      <div class="slides" id="slides">
+    <section id="loginSection" class="panel login">
+      <div class="eyebrow">Authorised access</div>
+      <h2>Welcome to reception.</h2>
+      <p class="muted">
+        Enter your dashboard password to view guest responses and arrivals.
+      </p>
 
-    <!-- SCREEN 1: PERSONAL WELCOME -->
-<section class="slide" aria-label="Welcome">
+      <form id="loginForm">
+        <label for="password">Dashboard password</label>
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+          required
+        >
+        <button id="loginButton" type="submit">Open dashboard</button>
+      </form>
 
-  <p class="eyebrow">A personal invitation</p>
+      <div id="loginMessage" class="message" role="status"></div>
+    </section>
 
-  <h1>
-    Welcome,<br>
-    <span id="guestName">Vanessa</span>
-  </h1>
+    <section id="dashboard" class="hidden">
+      <div class="eyebrow">Event overview</div>
+      <h1 id="eventTitle">Reception overview</h1>
+      <p class="muted">
+        Guest responses and recorded arrivals from your database.
+      </p>
 
-  <div class="rule"></div>
-
-  <p class="description">
-    You're specially invited to an exclusive birthday party.
-  </p>
-
-  <button class="primary" data-next>
-    Open your invitation &nbsp; →
-  </button>
-
-</section>
-
-        <!-- SCREEN 2: INVITATION -->
-        <section class="slide" aria-label="Invitation details">
-          <p class="eyebrow">You're invited</p>
-
-          <div class="invitation-card">
-            <p class="small">A birthday celebration</p>
-
-            <h2>The tailored<br>season</h2>
-
-            <p class="description">
-              <em>After sunset</em>
-            </p>
-
-            <div class="rule" style="margin-inline:auto"></div>
-
-            <div class="detail">
-              <strong>Date</strong>
-              <p>[Event date]</p>
-            </div>
-
-            <div class="detail">
-              <strong>Time</strong>
-              <p>[Event time]</p>
-            </div>
-
-            <div class="detail">
-              <strong>Location</strong>
-              <p>[Venue and address]</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- SCREEN 3: DRESS CODE -->
-        <section class="slide" aria-label="Dress code">
-          <p class="eyebrow">The dress code</p>
-
-          <h2>Come dressed<br>like <span>you mean it.</span></h2>
-
-          <p class="description">
-            Tailored, fashionable and entirely your own.
-            Bring your personal style; there's no need to wear a suit.
-          </p>
-
-          <div class="dress-code">
-            <div class="colour">
-              <div class="swatch"></div>
-              <strong>Black</strong>
-              <small>Classic & sharp</small>
-            </div>
-
-            <div class="colour">
-              <div class="swatch peach"></div>
-              <strong>Peach</strong>
-              <small>Soft & understated</small>
-            </div>
-          </div>
-
-          <p class="description">
-            These are inspiration colours, not restrictions.
-          </p>
-        </section>
-
-        <!-- SCREEN 4: THE EVENING -->
-        <section class="slide" aria-label="Evening schedule">
-          <p class="eyebrow">A glimpse of the evening</p>
-
-          <h2>One evening.<br><span>Several moments.</span></h2>
-
-          <div class="timeline">
-            <div class="timeline-item">
-              <time>ARRIVAL</time>
-              <div>
-                <strong>Settle in</strong>
-                <p>Arrive, find your place and get comfortable.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <time>THE EVENING</time>
-              <div>
-                <strong>Good food, good company</strong>
-                <p>Enjoy the atmosphere and spend time together.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <time>AFTER DARK</time>
-              <div>
-                <strong>Let the night unfold</strong>
-                <p>Music, laughter and moments worth remembering.</p>
-              </div>
-            </div>
-          </div>
-
-          <p class="description" style="margin-top:18px">
-            Final timings will be shared with the confirmed invitation.
-          </p>
-        </section>
-
-        <!-- SCREEN 5: RSVP -->
-        <section class="slide" aria-label="RSVP">
-          <p class="eyebrow">We hope to see you there</p>
-
-          <h2>Will you<br><span>be joining us?</span></h2>
-
-          <p class="description">
-            Let us know whether you'll be able to make it.
-            Your response helps us prepare for the evening.
-          </p>
-
-          <div class="rsvp-options">
-            <button class="primary" data-rsvp="yes">
-              I'll be there
-            </button>
-
-            <button class="outline" data-rsvp="no">
-              Can't make it
-            </button>
-          </div>
-
-          <p class="rsvp-message" id="rsvpMessage" aria-live="polite"></p>
-
-          <p class="description">
-            This is a demonstration. Responses are not yet saved
-            to a database or sent to the event organiser.
-          </p>
-        </section>
-
+      <div class="toolbar">
+        <span id="updated" class="eyebrow">Waiting for data</span>
+        <div>
+          <button id="refreshButton" class="secondary" type="button">
+            Refresh
+          </button>
+          <button id="logoutButton" type="button">Log out</button>
+        </div>
       </div>
-    </main>
 
-    <footer>
-      <span class="swipe-hint" id="swipeHint">
-        Swipe to continue →
-      </span>
+      <div class="stats">
+        <div class="stat">
+          <span>Total guests</span>
+          <strong id="total">—</strong>
+        </div>
+        <div class="stat">
+          <span>Attending</span>
+          <strong id="attending">—</strong>
+        </div>
+        <div class="stat">
+          <span>Not attending</span>
+          <strong id="declined">—</strong>
+        </div>
+        <div class="stat">
+          <span>Checked in</span>
+          <strong id="checkedIn">—</strong>
+        </div>
+      </div>
 
-      <div class="navigation">
-        <div class="dots" id="dots" aria-label="Invitation screens">
-          <button class="dot active" aria-label="Screen 1"></button>
-          <button class="dot" aria-label="Screen 2"></button>
-          <button class="dot" aria-label="Screen 3"></button>
-          <button class="dot" aria-label="Screen 4"></button>
-          <button class="dot" aria-label="Screen 5"></button>
+      <section class="panel table-panel">
+        <div class="table-heading">
+          <h2>Guest register</h2>
+          <p class="muted">RSVP and arrival status</p>
         </div>
 
-        <button class="nav-button" id="prev" aria-label="Previous screen" disabled>
-          ←
-        </button>
+        <div id="guestTable" class="table-wrap">
+          <p class="empty">Loading guests…</p>
+        </div>
+      </section>
 
-        <button class="nav-button" id="next" aria-label="Next screen">
-          →
-        </button>
-      </div>
-    </footer>
+      <div id="dashboardMessage" class="message" role="status"></div>
+    </section>
 
-  </div>
-
-  <div class="demo-label">Demo preview</div>
+    <footer>Vanta Events · Reception management</footer>
+  </main>
 
   <script>
-    const slidesContainer = document.getElementById("slides");
-    const slides = [...document.querySelectorAll(".slide")];
-    const dots = [...document.querySelectorAll(".dot")];
-    const prevButton = document.getElementById("prev");
-    const nextButton = document.getElementById("next");
-    const swipeHint = document.getElementById("swipeHint");
-// Vanta Events — Supabase connection
-const SUPABASE_FUNCTION_URL =
-  "https://agvbwoqmlocvofcdxvjh.supabase.co/functions/v1/dynamic-endpoint";
+    const FUNCTION_URL =
+      "https://agvbwoqmlocvofcdxvjh.supabase.co/functions/v1/dynamic-endpoint";
 
-// Read the invitation token from the URL.
-const params = new URLSearchParams(window.location.search);
-const invitationToken = params.get("token");
+    // Your Supabase publishable key.
+    const SUPABASE_PUBLIC_KEY =
+      "sb_publishable_xd4fYI8jRuAxyewCYMcj6g_4I6hgSoC";
 
-// The name is updated after the invitation is verified.
-async function loadPersonalInvitation() {
-  if (!invitationToken) {
-    console.log("Demo mode: no invitation token was provided.");
-    return;
-  }
+    const loginSection = document.getElementById("loginSection");
+    const dashboard = document.getElementById("dashboard");
+    const passwordInput = document.getElementById("password");
+    const loginMessage = document.getElementById("loginMessage");
+    const dashboardMessage = document.getElementById("dashboardMessage");
+    const loginButton = document.getElementById("loginButton");
+    const guestTable = document.getElementById("guestTable");
 
-  try {
-    const response = await fetch(SUPABASE_FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": "sb_publishable_xd4fYI8jRuAxyewCYMcj6g_4I6hgSoC"
-      },
-      body: JSON.stringify({
-        action: "lookup",
-        token: invitationToken
-      })
+    let dashboardPassword = "";
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      dashboardPassword = passwordInput.value;
+      loginButton.disabled = true;
+      loginButton.textContent = "Checking…";
+      loginMessage.textContent = "";
+
+      const success = await loadDashboard();
+
+      loginButton.disabled = false;
+      loginButton.textContent = "Open dashboard";
+
+      if (!success) {
+        dashboardPassword = "";
+        passwordInput.value = "";
+        passwordInput.focus();
+      }
     });
 
-    const result = await response.json();
+    async function loadDashboard() {
+      loginMessage.textContent = "";
+      dashboardMessage.textContent = "";
+      guestTable.innerHTML = '<p class="empty">Loading guests…</p>';
 
-    if (!response.ok) {
-      throw new Error(result.error || "Unable to load invitation.");
-    }
+      try {
+        const response = await fetch(FUNCTION_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLIC_KEY
+          },
+          body: JSON.stringify({
+            action: "dashboard",
+            dashboard_password: dashboardPassword
+          })
+        });
 
-    const guestName = document.getElementById("guestName");
+        const result = await response.json();
 
-    if (guestName && result.guest?.name) {
-      guestName.textContent = result.guest.name;
-    }
+        if (!response.ok) {
+          const message =
+            result.error || `Request failed (${response.status}).`;
 
-    console.log("Invitation loaded successfully.");
-  } catch (error) {
-    console.error("Invitation loading failed:", error.message);
-  }
-}
-    let currentSlide = 0;
+          if (dashboard.classList.contains("hidden")) {
+            loginMessage.textContent = message;
+          } else {
+            dashboardMessage.textContent = message;
+          }
 
-    function goToSlide(index) {
-      currentSlide = Math.max(0, Math.min(index, slides.length - 1));
-
-      slidesContainer.scrollTo({
-        left: slidesContainer.clientWidth * currentSlide,
-        behavior: "smooth"
-      });
-
-      updateNavigation();
-    }
-
-    function updateNavigation() {
-      dots.forEach((dot, index) => {
-        dot.classList.toggle("active", index === currentSlide);
-        dot.setAttribute("aria-current",
-          index === currentSlide ? "step" : "false");
-      });
-
-      prevButton.disabled = currentSlide === 0;
-      nextButton.disabled = currentSlide === slides.length - 1;
-
-      swipeHint.textContent =
-        currentSlide === slides.length - 1
-          ? "You're all caught up"
-          : "Swipe to continue →";
-    }
-
-    prevButton.addEventListener("click", () => {
-      goToSlide(currentSlide - 1);
-    });
-
-    nextButton.addEventListener("click", () => {
-      goToSlide(currentSlide + 1);
-    });
-
-    dots.forEach((dot, index) => {
-      dot.addEventListener("click", () => goToSlide(index));
-    });
-
-    document.querySelectorAll("[data-next]").forEach(button => {
-      button.addEventListener("click", () => {
-        goToSlide(currentSlide + 1);
-      });
-    });
-
-    // Keep the selected screen in sync when the guest swipes.
-    let scrollTimer;
-
-    slidesContainer.addEventListener("scroll", () => {
-      clearTimeout(scrollTimer);
-
-      scrollTimer = setTimeout(() => {
-        const width = slidesContainer.clientWidth;
-
-        if (width > 0) {
-          currentSlide = Math.max(
-            0,
-            Math.min(
-              Math.round(slidesContainer.scrollLeft / width),
-              slides.length - 1
-            )
-          );
-
-          updateNavigation();
+          return false;
         }
-      }, 80);
-    });
 
-    // Keyboard navigation for desktop users.
-    document.addEventListener("keydown", event => {
-      if (event.key === "ArrowRight") {
-        goToSlide(currentSlide + 1);
+        if (!Array.isArray(result.guests)) {
+          throw new Error("The server response did not contain a guest list.");
+        }
+
+        renderDashboard(result.guests);
+
+        loginSection.classList.add("hidden");
+        dashboard.classList.remove("hidden");
+
+        return true;
+      } catch (error) {
+        console.error("Dashboard error:", error);
+
+        const message =
+          "Could not load the dashboard. Check your connection and try again.";
+
+        if (dashboard.classList.contains("hidden")) {
+          loginMessage.textContent = message;
+        } else {
+          dashboardMessage.textContent = message;
+          guestTable.innerHTML =
+            '<p class="empty">Unable to load guest records.</p>';
+        }
+
+        return false;
       }
-
-      if (event.key === "ArrowLeft") {
-        goToSlide(currentSlide - 1);
-      }
-    });
-// Vanta Events — Save RSVP responses to Supabase
-document.querySelectorAll("[data-rsvp]").forEach(button => {
-  button.addEventListener("click", async () => {
-    const message = document.getElementById("rsvpMessage");
-
-    if (!invitationToken) {
-      message.textContent =
-        "Please open your personal invitation link to RSVP.";
-      return;
     }
 
-    const response =
-      button.dataset.rsvp === "yes"
-        ? "attending"
-        : "not_attending";
+    function renderDashboard(guests) {
+      const attending = guests.filter(g => g.rsvp === "attending").length;
+      const declined = guests.filter(g => g.rsvp === "not_attending").length;
+      const checkedIn = guests.filter(g => Boolean(g.checked_in_at)).length;
 
-    button.disabled = true;
-    message.textContent = "Saving your response...";
+      document.getElementById("total").textContent = guests.length;
+      document.getElementById("attending").textContent = attending;
+      document.getElementById("declined").textContent = declined;
+      document.getElementById("checkedIn").textContent = checkedIn;
 
-    try {
-      const result = await fetch(SUPABASE_FUNCTION_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": "sb_publishable_xd4fYI8jRuAxyewCYMcj6g_4I6hgSoC"
-        },
-        body: JSON.stringify({
-          action: "rsvp",
-          token: invitationToken,
-          response: response
-        })
-      });
+      document.getElementById("eventTitle").textContent =
+        guests.length && guests[0].event_name
+          ? guests[0].event_name
+          : "Reception overview";
 
-      const data = await result.json();
+      document.getElementById("updated").textContent =
+        "Updated " + new Date().toLocaleTimeString();
 
-      if (!result.ok) {
-        throw new Error(data.error || "Unable to save your response.");
+      if (guests.length === 0) {
+        guestTable.innerHTML =
+          '<p class="empty">No guest records found.</p>';
+        return;
       }
 
-      message.textContent =
-        response === "attending"
-          ? "Lovely! Your RSVP has been saved. We look forward to seeing you!"
-          : "Thank you for letting us know. Your RSVP has been saved.";
+      const rows = guests.map(g => {
+        const rsvpText =
+          g.rsvp === "attending" ? "Attending" :
+          g.rsvp === "not_attending" ? "Not attending" :
+          "No response";
 
-    } catch (error) {
-      message.textContent =
-  "RSVP error: " + error.message;
-      console.error("RSVP error:", error);
-    } finally {
+        const rsvpClass =
+          g.rsvp === "attending" ? "green" :
+          g.rsvp === "not_attending" ? "red" : "";
+
+        const arrivalText = g.checked_in_at
+          ? "Checked in"
+          : "Not checked in";
+
+        const arrivalClass = g.checked_in_at ? "green" : "";
+
+        const arrivalTime = g.checked_in_at
+          ? new Date(g.checked_in_at).toLocaleString()
+          : "—";
+
+        return `
+          <tr>
+            <td>${escapeHTML(g.guest_name || "Unnamed guest")}</td>
+            <td><span class="badge ${rsvpClass}">${rsvpText}</span></td>
+            <td><span class="badge ${arrivalClass}">${arrivalText}</span></td>
+            <td>${escapeHTML(arrivalTime)}</td>
+          </tr>
+        `;
+      }).join("");
+
+      guestTable.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Guest</th>
+              <th>RSVP</th>
+              <th>Arrival</th>
+              <th>Check-in time</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    document.getElementById("refreshButton").addEventListener("click", async () => {
+      const button = document.getElementById("refreshButton");
+      button.disabled = true;
+      button.textContent = "Refreshing…";
+
+      await loadDashboard();
+
       button.disabled = false;
-    }
-  });
-});
-
-    // Recalculate the screen position when the window changes size.
-    window.addEventListener("resize", () => {
-      slidesContainer.scrollLeft =
-        slidesContainer.clientWidth * currentSlide;
+      button.textContent = "Refresh";
     });
 
-    updateNavigation();
-    loadPersonalInvitation();
+    document.getElementById("logoutButton").addEventListener("click", () => {
+      dashboardPassword = "";
+      passwordInput.value = "";
+      dashboard.classList.add("hidden");
+      loginSection.classList.remove("hidden");
+      loginMessage.textContent = "";
+      dashboardMessage.textContent = "";
+    });
   </script>
 </body>
 </html>
