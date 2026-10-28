@@ -747,18 +747,59 @@ async function loadPersonalInvitation() {
         goToSlide(currentSlide - 1);
       }
     });
+// Vanta Events — Save RSVP responses to Supabase
+document.querySelectorAll("[data-rsvp]").forEach(button => {
+  button.addEventListener("click", async () => {
+    const message = document.getElementById("rsvpMessage");
 
-    // Prototype RSVP interaction: this does not save responses.
-    document.querySelectorAll("[data-rsvp]").forEach(button => {
-      button.addEventListener("click", () => {
-        const message = document.getElementById("rsvpMessage");
+    if (!invitationToken) {
+      message.textContent =
+        "Please open your personal invitation link to RSVP.";
+      return;
+    }
 
-        message.textContent =
-          button.dataset.rsvp === "yes"
-            ? "Lovely! Your sample response is: Attending."
-            : "Thank you. Your sample response is: Unable to attend.";
+    const response =
+      button.dataset.rsvp === "yes"
+        ? "attending"
+        : "not_attending";
+
+    button.disabled = true;
+    message.textContent = "Saving your response...";
+
+    try {
+      const result = await fetch(SUPABASE_FUNCTION_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "sb_publishable_xd4fYI8jRuAxyewCYMcj6g_4I6hgSoC"
+        },
+        body: JSON.stringify({
+          action: "rsvp",
+          token: invitationToken,
+          response: response
+        })
       });
-    });
+
+      const data = await result.json();
+
+      if (!result.ok) {
+        throw new Error(data.error || "Unable to save your response.");
+      }
+
+      message.textContent =
+        response === "attending"
+          ? "Lovely! Your RSVP has been saved. We look forward to seeing you!"
+          : "Thank you for letting us know. Your RSVP has been saved.";
+
+    } catch (error) {
+      message.textContent =
+        "We couldn't save your response. Please try again.";
+      console.error("RSVP error:", error);
+    } finally {
+      button.disabled = false;
+    }
+  });
+});
 
     // Recalculate the screen position when the window changes size.
     window.addEventListener("resize", () => {
