@@ -793,7 +793,7 @@ document.querySelectorAll("[data-rsvp]").forEach(button => {
 
     } catch (error) {
       message.textContent =
-        "We couldn't save your response. Please try again.";
+  "RSVP error: " + error.message;
       console.error("RSVP error:", error);
     } finally {
       button.disabled = false;
