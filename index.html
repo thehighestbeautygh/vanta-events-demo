@@ -622,7 +622,51 @@
     const prevButton = document.getElementById("prev");
     const nextButton = document.getElementById("next");
     const swipeHint = document.getElementById("swipeHint");
+// Vanta Events — Supabase connection
+const SUPABASE_FUNCTION_URL =
+  "https://agvbwoqmlocvofcdxvjh.supabase.co/functions/v1/dynamic-endpoint";
 
+// Read the invitation token from the URL.
+const params = new URLSearchParams(window.location.search);
+const invitationToken = params.get("token");
+
+// The name is updated after the invitation is verified.
+async function loadPersonalInvitation() {
+  if (!invitationToken) {
+    console.log("Demo mode: no invitation token was provided.");
+    return;
+  }
+
+  try {
+    const response = await fetch(SUPABASE_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": "sb_publishable_xd4fYI8jRuAxyewCYMcj6g_4I6hgSoC"
+      },
+      body: JSON.stringify({
+        action: "lookup",
+        token: invitationToken
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Unable to load invitation.");
+    }
+
+    const guestName = document.getElementById("guestName");
+
+    if (guestName && result.guest?.name) {
+      guestName.textContent = result.guest.name;
+    }
+
+    console.log("Invitation loaded successfully.");
+  } catch (error) {
+    console.error("Invitation loading failed:", error.message);
+  }
+}
     let currentSlide = 0;
 
     function goToSlide(index) {
@@ -723,6 +767,7 @@
     });
 
     updateNavigation();
+    loadPersonalInvitation();
   </script>
 </body>
 </html>
