@@ -382,15 +382,6 @@
         return;
       }
 
-      if (
-        !SUPABASE_PUBLIC_KEY ||
-        SUPABASE_PUBLIC_KEY === "sb_publishable_xd4fYI8jRuAxyewCYMcj6g_4I6hgSoC"
-      ) {
-        loginMessage.textContent =
-          "The public key has not been added yet. Complete the setup step below.";
-        return;
-      }
-
       dashboardPassword = enteredPassword;
       loginButton.disabled = true;
       loginButton.textContent = "Checking…";
