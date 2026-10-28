@@ -359,7 +359,7 @@
     // Replace this placeholder with the same public/publishable key
     // already used by your invitation website.
     // Never put your service-role key here.
-    const SUPABASE_PUBLIC_KEY = "PASTE_YOUR_EXISTING_PUBLIC_KEY_HERE";
+    const SUPABASE_PUBLIC_KEY = "sb_publishable_xd4fYI8jRuAxyewCYMcj6g_4I6hgSoC";
 
     const loginSection = document.getElementById("loginSection");
     const dashboardSection = document.getElementById("dashboardSection");
@@ -384,7 +384,7 @@
 
       if (
         !SUPABASE_PUBLIC_KEY ||
-        SUPABASE_PUBLIC_KEY === "PASTE_YOUR_EXISTING_PUBLIC_KEY_HERE"
+        SUPABASE_PUBLIC_KEY === "sb_publishable_xd4fYI8jRuAxyewCYMcj6g_4I6hgSoC"
       ) {
         loginMessage.textContent =
           "The public key has not been added yet. Complete the setup step below.";
